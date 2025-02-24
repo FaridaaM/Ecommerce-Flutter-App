@@ -8,47 +8,11 @@ import '../../../core/widgets/custom_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../home/presentation/home_screen.dart';
+import 'package:counter/core/widgets/custom_social_buttom.dart';
+import 'package:counter/feature/auth/presentation/forget_password_screen.dart';
 
-class CustomSocialButton extends StatelessWidget {
-  final String label;
-  final String iconPath;
-  final VoidCallback onPressed;
 
-  const CustomSocialButton({
-    super.key,
-    required this.label,
-    required this.iconPath,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.symmetric(vertical: 14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: Colors.grey.shade400),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(iconPath, height: 24),
-            SizedBox(width: 12),
-            Text(
-              label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
+import 'package:counter/feature/auth/presentation/register_screen.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
@@ -117,7 +81,10 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 14),
                   TextButton(
                     onPressed: () {
-                      // Navigate to the Forget Password screen or implement reset logic
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OTPScreen()));
                     },
                     child: Text(
                       "                       Forgot Password?",
@@ -134,30 +101,29 @@ class LoginScreen extends StatelessWidget {
                       }),
                   SizedBox(height: 20),
                   Text("  _____________ or continue with _____________", style: TextStyle(fontSize: 15 , color: Colors.grey)),
+                  SizedBox(height: 36),
                   CustomSocialButton(
                     label: "Continue with Google",
-                    iconPath: "assets/google.svg", // Your Google logo SVG
+                    iconPath: "assets/google.svg",
                     onPressed: () {
                       // Handle Google Sign-In logic
                     },
                   ),
 
                   SizedBox(height: 16),
-
-                  // Facebook Login Button
                   CustomSocialButton(
                     label: "Continue with Facebook",
-                    iconPath: "assets/facebook.svg", // Your Facebook logo SVG
+                    iconPath: "assets/facebook.svg",
                     onPressed: () {
-                      // Handle Facebook Sign-In logic
                     },
                   ),
+                  SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "Don't have an account?",
-                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        style: TextStyle(color: Colors.grey, fontSize: 15),
                       ),
                       TextButton(
                         onPressed: () {

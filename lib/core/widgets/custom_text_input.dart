@@ -40,6 +40,7 @@ class CustomTextInput extends StatelessWidget {
                 color: Colors.grey,
                 width: 1,
               ),
+
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),

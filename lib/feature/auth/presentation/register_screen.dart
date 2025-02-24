@@ -1,10 +1,12 @@
 import 'package:counter/feature/auth/logic/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:counter/core/widgets/custom_social_buttom.dart';
 
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_input.dart';
 import 'login_screen.dart';
+import 'package:counter/feature/auth/presentation/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -55,7 +57,7 @@ class RegisterScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 24),
                   Text(
-                    "Register new  \naccount.",
+                    "Create your new  \naccount",
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w600,
@@ -63,28 +65,23 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 24),
                   CustomTextInput(
-                    hintText: 'Enter Your Username',
-                    labelText: 'Username',
-                    controller: userNameController,
+                    hintText: 'Email address',
+                    labelText: 'Email Address',
+                    controller: emailController,
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 10),
                   CustomTextInput(
-                    hintText: 'Enter Your Password',
+                    hintText: 'Password',
                     labelText: 'Password',
                     controller: passwordController,
                     isPassword: true,
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: 10),
                   CustomTextInput(
-                    hintText: 'Enter Your email',
-                    labelText: 'email',
-                    controller: emailController,
-                  ),
-                  SizedBox(height: 24),
-                  CustomTextInput(
-                    hintText: 'Enter Your phone',
-                    labelText: 'phone',
-                    controller: phoneController,
+                    hintText: 'Password',
+                    labelText: 'Confirm Password',
+                    controller: passwordController,
+                    isPassword: true,
                   ),
                   SizedBox(height: 24),
                   CustomButton(
@@ -96,6 +93,48 @@ class RegisterScreen extends StatelessWidget {
                             emailController.text,
                             phoneController.text);
                       }),
+                  SizedBox(height: 24),
+                  Text("  _____________ or continue with _____________", style: TextStyle(fontSize: 15 , color: Colors.grey)),
+                  SizedBox(height: 36),
+                  CustomSocialButton(
+                    label: "Continue with Google",
+                    iconPath: "assets/google.svg",
+                    onPressed: () {
+                      // Handle Google Sign-In logic
+                    },
+                  ),
+
+                  SizedBox(height: 16),
+                  CustomSocialButton(
+                    label: "Continue with Facebook",
+                    iconPath: "assets/facebook.svg",
+                    onPressed: () {
+                    },
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(color: Colors.grey, fontSize: 15),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()));
+                          },
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                                color: Colors.blue,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ])
                 ],
               ),
             ));
