@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:counter/feature/auth/presentation/forget_password_screen.dart';
 
 class AppColor{
   AppColor._();

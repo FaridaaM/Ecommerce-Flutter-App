@@ -55,7 +55,7 @@ class HomeCubit extends Cubit<HomeState> {
     products = [];
 
     emit(HomeUserLoading());
-   await DioHelper.getData(url: Endpoints.currentUserDataEndpoint).then((value) {
+    await DioHelper.getData(url: Endpoints.currentUserDataEndpoint).then((value) {
       if (value.statusCode == 200 && value.data != null) {
         userData = UserModel.fromJson(value.data);
         print(userData!.name);
@@ -98,6 +98,30 @@ class HomeCubit extends Cubit<HomeState> {
       emit(ProductDetailsError(error.toString()));
     });
 
+  }
+  void toggleFavorite(ProductModel product) {
+    if (state is HomeFavoritesAndCartState) {
+      final currentState = state as HomeFavoritesAndCartState;
+      final updatedFavorites = List<ProductModel>.from(currentState.favorites);
+
+      if (updatedFavorites.contains(product)) {
+        updatedFavorites.remove(product);
+      } else {
+        updatedFavorites.add(product);
+      }
+
+      emit(currentState.copyWith(favorites: updatedFavorites));
+    }
+  }
+
+  void addToCart(ProductModel product) {
+    if (state is HomeFavoritesAndCartState) {
+      final currentState = state as HomeFavoritesAndCartState;
+      final updatedCart = List<ProductModel>.from(currentState.cart);
+      updatedCart.add(product);
+
+      emit(currentState.copyWith(cart: updatedCart));
+    }
   }
 
 

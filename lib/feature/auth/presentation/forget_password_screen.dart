@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:counter/feature/auth/presentation/Sucess.dart';
+
+
 
 class OTPScreen extends StatefulWidget {
   @override
@@ -107,7 +110,7 @@ class _OTPScreenState extends State<OTPScreen> {
                 borderRadius: BorderRadius.circular(10),
                 fieldHeight: 75,
                 fieldWidth: 75,
-                activeFillColor: Colors.white,
+                activeFillColor: Color(0xFFFFFFF),
                 inactiveFillColor: Colors.grey.shade200,
                 activeColor: Colors.grey.shade200,
                 inactiveColor: Colors.grey.shade200,
@@ -126,7 +129,16 @@ class _OTPScreenState extends State<OTPScreen> {
 
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: time >= 0 ? () => startTimer() : null,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                  ),
+                  isScrollControlled: true,
+                  builder: (context) => SuccessModal(),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 backgroundColor: Color(0xFF2D3C52),
@@ -134,6 +146,8 @@ class _OTPScreenState extends State<OTPScreen> {
               ),
               child: Text("Continue"),
             ),
+
+
           ],
         ),
       ),

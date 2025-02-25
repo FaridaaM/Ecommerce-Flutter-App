@@ -2,16 +2,13 @@ import 'package:counter/feature/auth/logic/auth_cubit.dart';
 import 'package:counter/feature/auth/presentation/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:counter/feature/home/presentation/onboard1.dart';
 import '../../../core/widgets/custom_button.dart';
 import '../../../core/widgets/custom_text_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../home/presentation/home_screen.dart';
 import 'package:counter/core/widgets/custom_social_buttom.dart';
-import 'package:counter/feature/auth/presentation/forget_password_screen.dart';
-
-
+import 'package:counter/feature/auth/presentation/forget_screen.dart';
 import 'package:counter/feature/auth/presentation/register_screen.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -79,18 +76,23 @@ class LoginScreen extends StatelessWidget {
                     isPassword: true,
                   ),
                   SizedBox(height: 14),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OTPScreen()));
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => PassModal(),
+                      );
                     },
                     child: Text(
-                      "                       Forgot Password?",
-                      style: TextStyle(color: Colors.black, fontSize: 15),
+                      "                           Forget Password?",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.black, // Change to match your design
+                      ),
                     ),
                   ),
+
                   SizedBox(height: 15),
 
                   CustomButton(

@@ -79,6 +79,10 @@ flutter:
     - assets/google.svg
     - assets/facebook.svg
     - assets/otp.svg
+    - assets/success.svg
+    - assets/email.svg
+    - assets/Image.png
+    - assets/girl-svgrepo-com.svg
 
   #   - images/a_dot_ham.jpeg
 
