@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../logic/home_cubit.dart';
+import 'package:counter/feature/cart/logic/cart_cubit.dart';
+import 'package:counter/feature/cart/data/model/product_cart_model.dart';
 import 'package:counter/feature/home/data/model/product_model.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class ProductDetailsScreen extends StatefulWidget {
   final ProductModel product;
 
   const ProductDetailsScreen({super.key, required this.product});
+
+  @override
+  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+}
+
+class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  bool isFavorite = false; // ✅ Local state for favorite button
 
   @override
   Widget build(BuildContext context) {
@@ -20,21 +28,20 @@ class ProductDetailsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          BlocBuilder<HomeCubit, HomeState>(
-            builder: (context, state) {
-              if (state is HomeFavoritesAndCartState) {
-                final isFavorite = state.favorites.contains(product);
-                return IconButton(
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite ? Colors.red : Colors.black,
-                  ),
-                  onPressed: () {
-                    context.read<HomeCubit>().toggleFavorite(product);
-                  },
-                );
-              }
-              return Icon(Icons.favorite_border, color: Colors.black);
+          IconButton(
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: isFavorite ? Colors.red : Colors.black,
+              size: 28,
+            ),
+            onPressed: () {
+              setState(() {
+                isFavorite = !isFavorite; // ✅ Toggle favorite locally
+              });
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(isFavorite ? "Added to favorites" : "Removed from favorites")),
+              );
             },
           ),
         ],
@@ -48,19 +55,19 @@ class ProductDetailsScreen extends StatelessWidget {
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(product.image ?? "", height: 250),
+                  child: Image.network(widget.product.image ?? "", height: 250),
                 ),
               ),
               const SizedBox(height: 15),
               Text(
-                product.title ?? "No Title",
+                widget.product.title ?? "No Title",
                 style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 5),
               Row(
                 children: [
                   Text(
-                    "\$${product.price?.toStringAsFixed(2) ?? "0.0"}",
+                    "\$${widget.product.price?.toStringAsFixed(2) ?? "0.0"}",
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -69,7 +76,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    "\$${(product.price! * 1.2).toStringAsFixed(2)}",
+                    "\$${(widget.product.price! * 1.2).toStringAsFixed(2)}",
                     style: const TextStyle(
                       fontSize: 16,
                       decoration: TextDecoration.lineThrough,
@@ -95,19 +102,18 @@ class ProductDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                product.description ?? "No Description",
+                widget.product.description ?? "No Description",
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 15),
-
             ],
           ),
         ),
       ),
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
@@ -124,7 +130,7 @@ class ProductDetailsScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(width: 10,),
+            // Cart Button
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -134,33 +140,42 @@ class ProductDetailsScreen extends StatelessWidget {
               child: IconButton(
                 icon: const Icon(Icons.shopping_bag_outlined, color: Colors.black, size: 28),
                 onPressed: () {
-                  context.read<HomeCubit>().addToCart(product);
+                  final cartCubit = context.read<CartCubit>();
+
+                  cartCubit.addProductToCart(ProductCartModel(
+                    id: widget.product.id.toString(),
+                    title: widget.product.title ?? "Unknown",
+                    price: widget.product.price ?? 0.0,
+                    description: widget.product.description ?? "No Description",
+                    quantity: 1,
+                    image: widget.product.image,
+                  ));
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Item added to cart")),
+                  );
                 },
               ),
             ),
-            SizedBox(width: 10,),
 
             // Checkout Button
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue.shade900, // Match the Figma color
+                backgroundColor: Colors.blue.shade900,
                 padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 50),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
               ),
               onPressed: () {
-                // TODO: Implement checkout functionality
+                Navigator.pushNamed(context, "/checkout");
               },
               child: const Text(
                 "Checkout",
                 style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(width: 10,),
-
           ],
         ),
       ),
-
     );
   }
 }

@@ -21,7 +21,7 @@ class RegisterScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        backgroundColor: Color(0xFFFFFFF),
+        backgroundColor: Colors.white,
         body: BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is AuthRegisterLoading) {

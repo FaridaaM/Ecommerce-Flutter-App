@@ -1,48 +1,69 @@
 part of 'home_cubit.dart';
 
 @immutable
-sealed class HomeState {}
+abstract class HomeState {}
 
-final class HomeInitial extends HomeState {}
+class HomeInitial extends HomeState {}
 
-final class HomeUserLoading extends HomeState {}
+class HomeUserLoading extends HomeState {}
 
-final class HomeUserLoaded extends HomeState {}
+class HomeUserLoaded extends HomeState {}
+class HomeProductsLoaded extends HomeState {}
 
-final class HomeUserError extends HomeState {
-  final String message;
-  HomeUserError(this.message);
+class HomeLoading extends HomeState {}
+
+class HomeLoaded extends HomeState {
+  final List<ProductModel> products;
+  HomeLoaded(this.products);
 }
 
-final class HomeProductsLoading extends HomeState {}
-
-final class HomeProductsLoaded extends HomeState {}
-
-final class HomeProductsError extends HomeState {
+class HomeError extends HomeState {
   final String message;
-  HomeProductsError(this.message);
+  HomeError(this.message);
 }
-
-final class ProductDetailsLoading extends HomeState {}
-
-final class ProductDetailsLoaded extends HomeState {}
-
-final class ProductDetailsError extends HomeState {
-  final String message;
-  ProductDetailsError(this.message);
-}
-
-// ✅ New State for Favorites & Cart
 class HomeFavoritesAndCartState extends HomeState {
   final List<ProductModel> favorites;
   final List<ProductModel> cart;
 
   HomeFavoritesAndCartState({required this.favorites, required this.cart});
 
-  HomeFavoritesAndCartState copyWith({List<ProductModel>? favorites, List<ProductModel>? cart}) {
+  HomeFavoritesAndCartState copyWith({
+    List<ProductModel>? favorites,
+    List<ProductModel>? cart,
+  }) {
     return HomeFavoritesAndCartState(
       favorites: favorites ?? this.favorites,
       cart: cart ?? this.cart,
     );
   }
+}
+
+class ProductDetailsLoaded extends HomeState {}
+class ProductDetailsLoading extends HomeState {}  // ✅ Add this if missing
+
+class HomeUserError extends HomeState {
+  final String error;
+  HomeUserError(this.error);
+}
+
+
+class HomeProductsError extends HomeState {
+  final String error;
+  HomeProductsError(this.error);
+}
+
+
+class ProductDetailsError extends HomeState {
+  final String error;
+  ProductDetailsError(this.error);
+}
+
+/// 🛒 **New CartUpdated state**
+class CartUpdated extends HomeState {
+  final List<ProductModel> cart;
+  CartUpdated(this.cart);
+}
+class FavoritesUpdated extends HomeState {
+  final List<ProductModel> favorites;
+  FavoritesUpdated(this.favorites);
 }

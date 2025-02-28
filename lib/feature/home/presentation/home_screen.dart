@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:counter/feature/home/presentation/search_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:counter/feature/cart/presentation/cart_screen.dart';
+import 'package:counter/feature/cart/presentation/fav.dart';
+import 'package:counter/feature/profile/profile_screen.dart';
 import 'package:counter/feature/home/logic/home_cubit.dart';
 import 'package:counter/feature/home/data/model/product_model.dart';
 import 'package:counter/feature/home/presentation/product_details_screen.dart';
+import 'package:counter/feature/cart/presentation/fav.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -42,13 +45,13 @@ class _HomeScreenState extends State<HomeScreen> {
       case 0:
         return _buildHomePage();
       case 1:
-        return _buildSearchPage();
+        return SearchScreen();
       case 2:
-        return _buildWishlistPage();
+        return FavScreen();
       case 3:
         return CartScreen();
       case 4:
-        return _buildProfilePage();
+        return ProfilePage();
       default:
         return _buildHomePage();
     }
@@ -99,11 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildWishlistPage() {
-    return Center(
-      child: Text("-"),
-    );
-  }
+
 
   Widget _buildProfilePage() {
     return Center(

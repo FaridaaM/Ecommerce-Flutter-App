@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../home/presentation/home_screen.dart';
 import 'package:counter/core/widgets/custom_social_buttom.dart';
 import 'package:counter/feature/auth/presentation/forget_screen.dart';
-import 'package:counter/feature/auth/presentation/register_screen.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 

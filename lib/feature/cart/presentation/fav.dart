@@ -4,9 +4,9 @@ import 'package:counter/feature/cart/logic/cart_cubit.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:counter/feature/cart/presentation/checkout.dart';
-
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+import 'package:counter/feature/cart/presentation/fav.dart';
+class FavScreen extends StatelessWidget {
+  const FavScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class CartScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
-            title: const Text('Your Cart'),
+            title: const Text('Your Wishlist'),
             centerTitle: true,
             backgroundColor: Colors.white,
             foregroundColor: Colors.black,
@@ -76,7 +76,7 @@ class CartScreen extends StatelessWidget {
                               IconButton(
                                 icon: const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () {
-                                  context.read<CartCubit>().deleteProduct(product.id!, );
+                                  context.read<CartCubit>().deleteProduct(product.id!,);
                                 },
                               ),
                             ],
@@ -85,7 +85,6 @@ class CartScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  _buildCartTotal(context),
                 ],
               );
             },
@@ -96,65 +95,6 @@ class CartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCartTotal(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 2,
-            offset: Offset(0, -3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Total:',
-                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                "\$${context.watch<CartCubit>().totalPrice}",
-                style: const TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            height: 56, // Match Figma button height
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ConfirmOrderScreen()),
-                );
-              },
-
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2D3C52), // Figma button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30), // Match Figma radius
-                ),
-              ),
-              child: const Text(
-                "Checkout",
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
 
   Widget _buildEmptyCartUI(BuildContext context) {
@@ -169,7 +109,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           const Text(
-            "Your cart is empty!",
+            "Your Wishlist is empty!",
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -178,7 +118,7 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           const Text(
-            "Looks like you haven’t added anything\n to your cart yet.",
+            "Looks like you haven’t added anything\n to your wishlist yet.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16,

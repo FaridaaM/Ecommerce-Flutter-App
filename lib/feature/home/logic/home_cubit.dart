@@ -10,11 +10,12 @@ part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
   UserModel? userData;
-
   List<ProductModel> products = [];
-
-  ProductModel ? product ;
+  ProductModel? product;
+  List<ProductModel> cart = [];
+  List<ProductModel> favorites = [];  // ✅ Favorites list added
 
   void getUserData() {
     emit(HomeUserLoading());
@@ -36,12 +37,10 @@ class HomeCubit extends Cubit<HomeState> {
       if (value.statusCode == 200 && value.data != null) {
         products =
             (value.data as List).map((e) => ProductModel.fromJson(e)).toList();
-
         print(products.length);
         emit(HomeProductsLoaded());
       } else {
         emit(HomeProductsError("Error"));
-
       }
     }).catchError((error) {
       print(error.toString());
@@ -50,11 +49,10 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> getHomeData() async {
-
     userData = null;
     products = [];
-
     emit(HomeUserLoading());
+
     await DioHelper.getData(url: Endpoints.currentUserDataEndpoint).then((value) {
       if (value.statusCode == 200 && value.data != null) {
         userData = UserModel.fromJson(value.data);
@@ -66,22 +64,20 @@ class HomeCubit extends Cubit<HomeState> {
     }).catchError((error) {
       emit(HomeUserError(error.toString()));
     });
+
     await DioHelper.getData(url: Endpoints.productsEndpoint).then((value) {
       if (value.statusCode == 200 && value.data != null) {
         products =
             (value.data as List).map((e) => ProductModel.fromJson(e)).toList();
-
         print(products.length);
         emit(HomeProductsLoaded());
       } else {
         emit(HomeProductsError("Error"));
-
       }
     }).catchError((error) {
       print(error.toString());
       emit(HomeProductsError(error.toString()));
     });
-
   }
 
   void getSingleProduct(int id) {
@@ -97,32 +93,38 @@ class HomeCubit extends Cubit<HomeState> {
     }).catchError((error) {
       emit(ProductDetailsError(error.toString()));
     });
-
-  }
-  void toggleFavorite(ProductModel product) {
-    if (state is HomeFavoritesAndCartState) {
-      final currentState = state as HomeFavoritesAndCartState;
-      final updatedFavorites = List<ProductModel>.from(currentState.favorites);
-
-      if (updatedFavorites.contains(product)) {
-        updatedFavorites.remove(product);
-      } else {
-        updatedFavorites.add(product);
-      }
-
-      emit(currentState.copyWith(favorites: updatedFavorites));
-    }
   }
 
+  /// 🛒 **Add product to cart**
   void addToCart(ProductModel product) {
-    if (state is HomeFavoritesAndCartState) {
-      final currentState = state as HomeFavoritesAndCartState;
-      final updatedCart = List<ProductModel>.from(currentState.cart);
-      updatedCart.add(product);
+    print("🛒 Trying to add: ${product.title}");
 
-      emit(currentState.copyWith(cart: updatedCart));
-    }
+    cart.add(product);
+    print("✅ Added to cart: ${cart.length} items");
+
+    emit(CartUpdated(cart)); // Ensure state is emitted
   }
 
 
+  /// 🛒 **Remove product from cart**
+  void removeFromCart(ProductModel product) {
+    cart.remove(product);
+    print("❌ Removed from cart: ${product.title}");
+    print("🛒 Cart Size: ${cart.length}");
+
+    emit(CartUpdated(cart)); // ✅ Emit updated cart state
+  }
+
+  /// ❤️ **Toggle favorite product**
+  void toggleFavorite(ProductModel product) {  // ✅ Now inside HomeCubit
+    if (favorites.contains(product)) {
+      favorites.remove(product);
+      print("❌ Removed from favorites: ${product.title}");
+    } else {
+      favorites.add(product);
+      print("❤️ Added to favorites: ${product.title}");
+    }
+
+    emit(FavoritesUpdated(favorites));  // ✅ Emit updated favorites state
+  }
 }

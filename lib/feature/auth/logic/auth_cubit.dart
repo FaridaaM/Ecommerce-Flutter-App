@@ -13,16 +13,19 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoginLoading());
     Map<String, String> data = {'username': "mor_2314", 'password': "83r5^_"};
     DioHelper.postData(url: Endpoints.loginEndPoint, data: data).then((value) {
+      print("Login Response: ${value.data}"); // Debugging line
+
       if (value.statusCode == 200) {
         CacheHelper.saveData(key: "token", value: value.data['token']);
         emit(AuthLoginSuccess());
       } else {
-        emit(AuthLoginFailure("Login failed , please try again"));
+        emit(AuthLoginFailure("Login failed, please try again"));
       }
     }).onError((error, stackTrace) {
-      emit(AuthLoginFailure("Login failed , please try again"));
+      emit(AuthLoginFailure("Login failed, please try again"));
     });
   }
+
 
   void register(String userName, String password, String email, String phone) {
     emit(AuthRegisterLoading());
